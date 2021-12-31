@@ -236,7 +236,7 @@
             <Component class="javax.swing.JTable" name="tblProductAdd">
               <Properties>
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                  <Table columnCount="5" rowCount="4">
+                  <Table columnCount="5" rowCount="9">
                     <Column editable="false" title="Product ID" type="java.lang.String"/>
                     <Column editable="false" title="Product Name" type="java.lang.String"/>
                     <Column editable="false" title="Origin Price" type="java.lang.Integer"/>
@@ -274,7 +274,7 @@
                   </TableColumnModel>
                 </Property>
                 <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
-                  <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
+                  <TableHeader reorderingAllowed="false" resizingAllowed="true"/>
                 </Property>
               </Properties>
               <AccessibilityProperties>
@@ -282,6 +282,9 @@
                   <ComponentRef name="jPanel1"/>
                 </Property>
               </AccessibilityProperties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tblProductAddMouseClicked"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>

@@ -93,6 +93,7 @@ public class SortPanel extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
+        tblProductSort.getTableHeader().setReorderingAllowed(false);
         jScrollPane2.setViewportView(tblProductSort);
         if (tblProductSort.getColumnModel().getColumnCount() > 0) {
             tblProductSort.getColumnModel().getColumn(0).setResizable(false);

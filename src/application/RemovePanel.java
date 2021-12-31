@@ -94,6 +94,7 @@ public class RemovePanel extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
+        tblProductRemove.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(tblProductRemove);
         if (tblProductRemove.getColumnModel().getColumnCount() > 0) {
             tblProductRemove.getColumnModel().getColumn(0).setResizable(false);

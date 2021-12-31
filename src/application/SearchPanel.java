@@ -91,6 +91,7 @@ public class SearchPanel extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
+        tblProductSearch.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(tblProductSearch);
         if (tblProductSearch.getColumnModel().getColumnCount() > 0) {
             tblProductSearch.getColumnModel().getColumn(0).setResizable(false);
@@ -149,7 +150,7 @@ public class SearchPanel extends javax.swing.JPanel {
         if (ID.length()>0){
             if (Application.search(ID) == false){
                 JOptionPane.showMessageDialog(this, "ID is not existed!", "Error", JOptionPane.INFORMATION_MESSAGE);
-                TextID.setBackground(new Color(255, 123, 123));
+    //                TextID.setBackground(new Color(255, 123, 123));
             } else {
                 TextID.setBackground(null);
                 ProductList = Application.findByFullName(ID);

@@ -30,9 +30,15 @@ import org.apache.commons.io.output.UnsynchronizedByteArrayOutputStream;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import java.text.DateFormat;  
+import java.text.SimpleDateFormat;  
+import java.util.Date;  
+import java.util.Calendar;      
 
 public class Application {
-
+    
+    private Connection conn;
+    
     public static List<Product> findAll() {
 
         List<Product> ProductList = new ArrayList<>();
@@ -51,8 +57,51 @@ public class Application {
 
             while (resultSet.next()) {
 
-                Product pdt = new Product(resultSet.getString("ProductID"), resultSet.getString("ProductName"),
-                         resultSet.getInt("originPrice"), resultSet.getInt("price"), resultSet.getInt("amount"));
+               Product pdt = new Product ();
+                pdt.setProductID(resultSet.getString("productID"));
+                pdt.setProductName(resultSet.getString("productName"));
+                pdt.setOriginPrice(resultSet.getInt("originPrice"));
+                pdt.setPrice(resultSet.getInt("price"));
+                pdt.setAmount(resultSet.getInt("amount"));
+                
+                ProductList.add(pdt);
+
+            }
+
+        } catch (Exception e) {
+            System.out.println("Noi ket khong thanh cong " + e.getMessage());
+        }
+        return ProductList;
+    }
+    
+    public static List<Product> findAll2() {
+
+        List<Product> ProductList = new ArrayList<>();
+
+        Connection conn = null;
+        Statement statement = null;
+
+        try {
+
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost/test?user=root&useSSL=false&password=daiphucprohehe");
+            String sql = "select * from Product_change";
+            statement = conn.createStatement();
+
+            ResultSet resultSet = statement.executeQuery(sql);
+
+            while (resultSet.next()) {
+
+               Product pdt = new Product ();
+                pdt.setUserName(resultSet.getString("userName"));
+                pdt.setTimeInsert(resultSet.getString("timeInsert"));
+                pdt.setActionType(resultSet.getString("actionType"));
+                pdt.setProductIDChange(resultSet.getString("productID"));
+                pdt.setProductNameChange(resultSet.getString("productName"));
+                pdt.setOriginPriceChange(resultSet.getInt("originPrice"));
+                pdt.setPriceChange(resultSet.getInt("price"));
+                pdt.setAmountChange(resultSet.getInt("amount"));
+                
                 ProductList.add(pdt);
 
             }
@@ -69,8 +118,9 @@ public class Application {
         PreparedStatement statement = null;
 
         try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection("jdbc:mysql://localhost/test?user=root&useSSL=false&password=daiphucprohehe");
-            String sql = "insert into product(productID, productName, originPrice, price, amount) values(?, ?, ?, ?, ?)";
+            String sql = "call ProductInsert(?, ?, ?, ?, ?);";
             statement = conn.prepareCall(sql);
 
             statement.setString(1, pdt.getProductID());
@@ -79,9 +129,10 @@ public class Application {
             statement.setInt(4, pdt.getPrice());
             statement.setInt(5, pdt.getAmount());
 
-            statement.execute();
+            statement.executeUpdate();
 
         } catch (Exception e) {
+            e.printStackTrace();
             System.out.println("Noi ket khong thanh cong " + e.getMessage());
         }
     }
@@ -93,7 +144,7 @@ public class Application {
 
         try {
             conn = DriverManager.getConnection("jdbc:mysql://localhost/test?user=root&useSSL=false&password=daiphucprohehe");
-            String sql = "delete from product where ProductID like ?";
+            String sql = "call ProductDelete(?)";
             statement = conn.prepareCall(sql);
 
             statement.setString(1, id);
@@ -123,8 +174,14 @@ public class Application {
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                Product pdt = new Product(resultSet.getString("ProductID"), resultSet.getString("ProductName"),
-                         resultSet.getInt("originPrice"), resultSet.getInt("price"), resultSet.getInt("amount"));
+                
+                Product pdt = new Product ();
+                pdt.setProductID(resultSet.getString("productID"));
+                pdt.setProductName(resultSet.getString("productName"));
+                pdt.setOriginPrice(resultSet.getInt("originPrice"));
+                pdt.setPrice(resultSet.getInt("price"));
+                pdt.setAmount(resultSet.getInt("amount"));
+                
                 ProductList.add(pdt);
             }
 
@@ -149,21 +206,26 @@ public class Application {
             String sql = new String();
 
             if (choice == 1) {
-                sql = "select * from product order by ProductName";
+                sql = "call ProductSortName()";
             }
             if (choice == 2) {
-                sql = "select * from product order by price";
+                sql = "call ProductSortPrice()";
             }
             if (choice == 3) {
-                sql = "select * from product order by amount";
+                sql = "call ProductSortAmount()";
             }
             statement = conn.prepareCall(sql);
 
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                Product pdt = new Product(resultSet.getString("ProductID"), resultSet.getString("ProductName"),
-                         resultSet.getInt("originPrice"), resultSet.getInt("price"), resultSet.getInt("amount"));
+                Product pdt = new Product ();
+                pdt.setProductID(resultSet.getString("productID"));
+                pdt.setProductName(resultSet.getString("productName"));
+                pdt.setOriginPrice(resultSet.getInt("originPrice"));
+                pdt.setPrice(resultSet.getInt("price"));
+                pdt.setAmount(resultSet.getInt("amount"));
+                
                 ProductList.add(pdt);
             }
 
@@ -218,6 +280,236 @@ public class Application {
             System.out.println("Noi ket khong thanh cong " + e.getMessage());
         }
         return false;
+    }
+    
+    public static boolean login(String staffID, String pass){
+        
+        Connection conn = null;
+        PreparedStatement statement = null;
+        boolean res=true;
+        
+        try {
+
+            conn = DriverManager.getConnection("jdbc:mysql://localhost/test?user=root&useSSL=false&password=daiphucprohehe");
+            PreparedStatement passnew =conn.prepareStatement("select *"
+                    + " from staff where staffID = '" +staffID +"' and pass ='" + pass + "'",ResultSet.TYPE_SCROLL_SENSITIVE, 
+                        ResultSet.CONCUR_UPDATABLE);
+           
+            ResultSet rs = passnew.executeQuery();
+
+            if (!rs.isBeforeFirst()){
+                res=false;
+            }else if (rs.next()){
+                LoginSession.userName=rs.getString("staffName");
+                LoginSession.ID = rs.getString("staffID");
+                LoginSession.email=rs.getString("email");
+                LoginSession.phone=rs.getString("phone");
+                LoginSession.password=rs.getString("pass");
+                LoginSession.DOB=rs.getString("DOB");
+                LoginSession.gender=rs.getString("gender");
+                
+                res=true;    
+            }
+        }
+        catch (Exception e){
+            System.out.println("Noi ket khong thanh cong " + e.getMessage());
+        }
+        return res;
+    }
+    
+    public static int register(String name, String gender, String DOB, String email, String phone, String ID, String pass){
+        
+        Connection conn = null;
+        PreparedStatement statement = null;
+        int res=1;
+        
+        try {
+            
+            conn = DriverManager.getConnection("jdbc:mysql://localhost/test?user=root&useSSL=false&password=daiphucprohehe");
+            PreparedStatement passnew =conn.prepareStatement("select * from staff where staffID = ? or pass = ?",ResultSet.TYPE_SCROLL_SENSITIVE, 
+                        ResultSet.CONCUR_UPDATABLE);
+            
+            passnew.setString(1, ID);
+            passnew.setString(2, pass);
+            ResultSet rs = passnew.executeQuery();
+            
+            if (!rs.isBeforeFirst()){
+                
+                res=1;
+                String sql = "call add_acc_staff(?, ?, ?, ?, ?, ?, ?)";
+                statement = conn.prepareCall(sql);
+            
+                statement.setString (1, name);
+                statement.setString (2, gender);
+                statement.setString (3, DOB);
+                statement.setString (4, email);
+                statement.setString (5, phone);
+                statement.setString (6, ID);
+                statement.setString (7, pass);
+                
+                LoginSession.userName=name;
+                LoginSession.gender=gender;
+                LoginSession.DOB=DOB;
+                LoginSession.email=email;
+                LoginSession.phone=phone;
+                LoginSession.ID=ID;
+                LoginSession.password=pass;
+                
+                ResultSet rs2 = statement.executeQuery();
+            }else if (rs.next()){
+                res=0; 
+            }
+        }catch (Exception e){
+            System.out.println("Noi ket khong thanh cong " + e.getMessage());
+        }
+        
+        return res;
+    }
+    
+    public static void update(int choice, String ProductID, String ProductName, int OriginPrice, int Price, int Amount){
+        
+        Connection conn = null;
+        PreparedStatement statement = null;
+        String sql="";
+        Date date = Calendar.getInstance().getTime();  
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");  
+        String strDate = dateFormat.format(date);   
+
+        try {
+
+            conn = DriverManager.getConnection("jdbc:mysql://localhost/test?user=root&useSSL=false&password=daiphucprohehe");
+            sql = "insert into Product_change (userName, timeInsert, actionType, ProductID, ProductName, originPrice, price, amount) "
+                    + "values (?, ?, ?, ?, ?, ?, ?, ?)";
+            statement = conn.prepareCall(sql);
+            if (choice == 1){
+                statement.setString(3, "insert");
+            } else if (choice == 2){
+                statement.setString(3, "delete");
+            } else if (choice == 3){
+                statement.setString(3, "update");
+            }
+            
+            
+            statement.setString(1, LoginSession.userName);
+            statement.setString(2, strDate);
+            statement.setString(4, ProductID);
+            statement.setString(5, ProductName);
+            statement.setInt(6, OriginPrice);
+            statement.setInt(7, Price);
+            statement.setInt(8, Amount);
+            statement.executeUpdate();
+            
+            
+        } catch (Exception e) {
+            System.out.println("Noi ket khong thanh cong " + e.getMessage());
+        }
+        
+    }
+    
+    public static void clear(){
+        
+        Connection conn = null;
+        PreparedStatement statement = null;
+        
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost/test?user=root&useSSL=false&password=daiphucprohehe");
+            String sql = "delete from Product_change;";
+            statement = conn.prepareCall(sql);
+
+            statement.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Noi ket khong thanh cong " + e.getMessage());
+        }
+        
+    }
+    
+    public static boolean checkAmount(String ID, int number){
+        Connection conn = null;
+        PreparedStatement statement = null;
+        
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost/test?user=root&useSSL=false&password=daiphucprohehe");
+            String sql = "select amount from product where ProductID = ? and amount >= ?;";
+            statement = conn.prepareCall(sql);
+            
+            statement.setString(1, ID);
+            statement.setInt(2, number);
+
+            ResultSet rs = statement.executeQuery();
+            
+            if (!rs.next()){
+                return false;
+            } 
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Noi ket khong thanh cong " + e.getMessage());
+        }
+        return true;
+    }
+    
+    public static void getStaffInfor(String ID){
+        
+        Connection conn = null;
+        PreparedStatement statement = null;
+        
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost/test?user=root&useSSL=false&password=daiphucprohehe");
+            String sql = "select * from staff where staffID = ?";
+            statement = conn.prepareCall(sql);
+            
+            statement.setString(1, ID);
+
+            ResultSet rs = statement.executeQuery();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Noi ket khong thanh cong " + e.getMessage());
+        }
+    }
+    
+    public static void saveChange(String name, String gender, String DOB, String email, String phone, String ID, String pass){
+        
+        Connection conn = null;
+        PreparedStatement statement = null;
+        int res=1;
+        
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost/test?user=root&useSSL=false&password=daiphucprohehe");
+            String sql = "update staff set staffName = ?, gender = ?, DOB = ?, email = ?, phone = ?, staffID = ?,"
+                     + "pass = ? where staffID = ?";
+            statement = conn.prepareCall(sql);
+            
+            statement.setString(1, name);
+            statement.setString(2, gender);
+            statement.setString(3, DOB);
+            statement.setString(4, email);
+            statement.setString(5, phone);
+            statement.setString(6, ID);
+            statement.setString(7, pass);
+            statement.setString(8, LoginSession.ID);
+            
+            LoginSession.userName = name;
+            LoginSession.gender = gender;
+            LoginSession.DOB = DOB;
+            LoginSession.email = email;
+            LoginSession.phone = phone;
+            LoginSession.ID = ID;
+            LoginSession.password = pass;
+
+            statement.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Noi ket khong thanh cong " + e.getMessage());
+        }
+        
     }
     
 }

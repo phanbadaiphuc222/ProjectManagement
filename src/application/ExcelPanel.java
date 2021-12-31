@@ -89,6 +89,7 @@ public class ExcelPanel extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
+        tblProductExcel.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(tblProductExcel);
         if (tblProductExcel.getColumnModel().getColumnCount() > 0) {
             tblProductExcel.getColumnModel().getColumn(0).setResizable(false);

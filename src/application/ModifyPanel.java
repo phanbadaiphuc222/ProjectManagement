@@ -134,6 +134,12 @@ public class ModifyPanel extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
+        tblProductModify.getTableHeader().setReorderingAllowed(false);
+        tblProductModify.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblProductModifyMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblProductModify);
         if (tblProductModify.getColumnModel().getColumnCount() > 0) {
             tblProductModify.getColumnModel().getColumn(0).setResizable(false);
@@ -230,14 +236,24 @@ public class ModifyPanel extends javax.swing.JPanel {
                 JOptionPane.showMessageDialog(this, "Amount is null!", "Error", JOptionPane.INFORMATION_MESSAGE);
                 TextAmount.setBackground(new Color(255, 123, 123));
             } else {
-                Product ptd = new Product(ID, Name, OriginPrice, Price, Amount);
+                Product ptd = new Product();
                 TextName.setBackground(null);
                 TextID.setBackground(null);
                 TextOriginPrice.setBackground(null);
                 TextPrice.setBackground(null);
                 TextAmount.setBackground(null);
+                
+                ptd.setProductID(ID);
+                ptd.setProductName(Name);
+                ptd.setOriginPrice(OriginPrice);
+                ptd.setPrice(Price);
+                ptd.setAmount(Amount);
+                
                 if (Application.search(ID) == false) JOptionPane.showMessageDialog(this, "ID is not existed!", "Error", JOptionPane.INFORMATION_MESSAGE);
-                else Application.modify(ptd);;
+                else {
+                    Application.modify(ptd);
+                    Application.update(3, ID, Name, OriginPrice, Price, Amount);
+                }
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Errol: " + e.getMessage());
@@ -252,6 +268,17 @@ public class ModifyPanel extends javax.swing.JPanel {
     private void TextIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TextIDActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_TextIDActionPerformed
+
+    private void tblProductModifyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblProductModifyMouseClicked
+        // TODO add your handling code here:
+        DefaultTableModel model = (DefaultTableModel) tblProductModify.getModel();
+        int selectedRowIndex = tblProductModify.getSelectedRow();
+        TextID.setText(model.getValueAt(selectedRowIndex, 0).toString());
+        TextName.setText(model.getValueAt(selectedRowIndex, 1).toString());
+        TextAmount.setText(model.getValueAt(selectedRowIndex, 4).toString());
+        TextOriginPrice.setText(model.getValueAt(selectedRowIndex, 2).toString());
+        TextPrice.setText(model.getValueAt(selectedRowIndex, 3).toString());
+    }//GEN-LAST:event_tblProductModifyMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

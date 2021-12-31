@@ -47,6 +47,12 @@ public class GUI extends javax.swing.JFrame {
     public SortPanel SortTab;
     public ExcelPanel ETab;
     public ModifyPanel MTab;
+    public HistoryPanel HTab;
+    public OrderPanel OTab;
+    
+    public void CloseFrame(){
+        super.dispose();
+    }
     
     public GUI() {
         initComponents();
@@ -55,6 +61,7 @@ public class GUI extends javax.swing.JFrame {
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         MainTab.setLayout(new BorderLayout());
         this.setLocationRelativeTo(null);
+        userName.setText("Welcome, "+LoginSession.userName+"!");
     }
 
     /**
@@ -80,9 +87,19 @@ public class GUI extends javax.swing.JFrame {
         RemoveButton = new javax.swing.JButton();
         jSeparator3 = new javax.swing.JToolBar.Separator();
         ExcelButton = new javax.swing.JButton();
+        jSeparator4 = new javax.swing.JToolBar.Separator();
+        HistoryButton = new javax.swing.JButton();
+        jSeparator5 = new javax.swing.JToolBar.Separator();
+        HistoryButton1 = new javax.swing.JButton();
+        jSeparator7 = new javax.swing.JToolBar.Separator();
+        LogOutButton = new javax.swing.JButton();
         ExitButton = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         MainTab = new javax.swing.JTabbedPane();
+        jPanel2 = new javax.swing.JPanel();
+        userName = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        EditButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -186,6 +203,51 @@ public class GUI extends javax.swing.JFrame {
             }
         });
         jToolBar1.add(ExcelButton);
+        jToolBar1.add(jSeparator4);
+
+        HistoryButton.setBackground(new java.awt.Color(255, 255, 255));
+        HistoryButton.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
+        HistoryButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/application/Icon/excel-icon.png"))); // NOI18N
+        HistoryButton.setText("History");
+        HistoryButton.setFocusable(false);
+        HistoryButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        HistoryButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        HistoryButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                HistoryButtonActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(HistoryButton);
+        jToolBar1.add(jSeparator5);
+
+        HistoryButton1.setBackground(new java.awt.Color(255, 255, 255));
+        HistoryButton1.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
+        HistoryButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/application/Icon/total-icon.png"))); // NOI18N
+        HistoryButton1.setText("Order");
+        HistoryButton1.setFocusable(false);
+        HistoryButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        HistoryButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        HistoryButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                HistoryButton1ActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(HistoryButton1);
+        jToolBar1.add(jSeparator7);
+
+        LogOutButton.setBackground(new java.awt.Color(255, 255, 255));
+        LogOutButton.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
+        LogOutButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/application/Icon/logOut.png"))); // NOI18N
+        LogOutButton.setText("Log out");
+        LogOutButton.setFocusable(false);
+        LogOutButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        LogOutButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        LogOutButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                LogOutButtonActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(LogOutButton);
 
         ExitButton.setBackground(new java.awt.Color(255, 255, 255));
         ExitButton.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
@@ -201,26 +263,82 @@ public class GUI extends javax.swing.JFrame {
 
         MainTab.setPreferredSize(new java.awt.Dimension(100, 400));
 
+        jPanel2.setBackground(new java.awt.Color(255, 255, 0));
+
+        userName.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addComponent(userName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(0, 0, 0))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(userName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        jPanel3.setBackground(new java.awt.Color(255, 255, 0));
+
+        EditButton.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        EditButton.setText("Edit Information");
+        EditButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                EditButtonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(EditButton)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(EditButton)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 700, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(ExitButton))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(MainTab, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 642, Short.MAX_VALUE)
+                        .addGap(0, 0, 0)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 0, 0)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(ExitButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -306,6 +424,41 @@ public class GUI extends javax.swing.JFrame {
         MTab.showProduct();
     }//GEN-LAST:event_ModifyButtonActionPerformed
 
+    private void HistoryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HistoryButtonActionPerformed
+        // TODO add your handling code here:
+        if (HTab == null){
+            HTab = new HistoryPanel();
+            MainTab.addTab("History", HTab);
+        }
+        MainTab.setSelectedComponent(HTab);
+        HTab.showProduct();
+    }//GEN-LAST:event_HistoryButtonActionPerformed
+
+    private void LogOutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LogOutButtonActionPerformed
+        // TODO add your handling code here:
+        int response = JOptionPane.showConfirmDialog(this, "Do you want to log out?", "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if (response == JOptionPane.YES_OPTION){
+            new Login().setVisible(true);
+            CloseFrame();
+        }
+    }//GEN-LAST:event_LogOutButtonActionPerformed
+
+    private void HistoryButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HistoryButton1ActionPerformed
+        // TODO add your handling code here:
+        if (OTab == null){
+            OTab=new OrderPanel();
+            MainTab.addTab("Order", OTab);
+        }
+//        OTab.showProduct();
+        MainTab.setSelectedComponent(OTab);
+    }//GEN-LAST:event_HistoryButton1ActionPerformed
+
+    private void EditButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditButtonActionPerformed
+        // TODO add your handling code here:
+        Application.getStaffInfor(LoginSession.ID);
+        new Edit().setVisible(true);
+    }//GEN-LAST:event_EditButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -321,6 +474,8 @@ public class GUI extends javax.swing.JFrame {
     DefaultTableModel dm = new DefaultTableModel();
     java.util.List <Product> ProductList;
     
+//    <ProductChange>ProductList;
+    
     private void getData(){
        
         dm.setRowCount(0);
@@ -333,14 +488,33 @@ public class GUI extends javax.swing.JFrame {
         
         System.out.println(String.valueOf(dm.getColumnCount()) + "\n" + String.valueOf(dm.getRowCount()));
         
-    } 
+    }
+    
+//    private void getDataChange(){
+//       
+//        dm.setRowCount(0);
+//        ProductList = Application.findAll();
+//               
+//        ProductList.forEach(ProductChange -> {
+//            dm.addRow(new Object[] {Product_change.getuserName(), Product_change.gettimeInsert(), Product_change.getActionType(),
+//            Product_change.getProductID(), Product_change.getProductName(), Product_change.getOriginPrice(), 
+//            Product_change.getPrice(), Product_change.getAmount()});        
+//        });
+//        
+//        System.out.println(String.valueOf(dm.getColumnCount()) + "\n" + String.valueOf(dm.getRowCount()));
+//        
+//    }
     
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton AddButton;
+    private javax.swing.JButton EditButton;
     private javax.swing.JButton ExcelButton;
     private javax.swing.JButton ExitButton;
+    private javax.swing.JButton HistoryButton;
+    private javax.swing.JButton HistoryButton1;
+    private javax.swing.JButton LogOutButton;
     private javax.swing.JTabbedPane MainTab;
     private javax.swing.JButton ModifyButton;
     private javax.swing.JButton RemoveButton;
@@ -348,12 +522,18 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JButton SortButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JToolBar.Separator jSeparator3;
+    private javax.swing.JToolBar.Separator jSeparator4;
+    private javax.swing.JToolBar.Separator jSeparator5;
     private javax.swing.JToolBar.Separator jSeparator6;
+    private javax.swing.JToolBar.Separator jSeparator7;
     private javax.swing.JToolBar.Separator jSeparator8;
     private javax.swing.JToolBar.Separator jSeparator9;
     private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JLabel userName;
     // End of variables declaration//GEN-END:variables
 }

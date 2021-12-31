@@ -129,6 +129,11 @@ public class AddPanel extends javax.swing.JPanel {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
                 {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
                 {null, null, null, null, null}
             },
             new String [] {
@@ -148,6 +153,12 @@ public class AddPanel extends javax.swing.JPanel {
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
+            }
+        });
+        tblProductAdd.getTableHeader().setReorderingAllowed(false);
+        tblProductAdd.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblProductAddMouseClicked(evt);
             }
         });
         jScrollPane1.setViewportView(tblProductAdd);
@@ -283,14 +294,24 @@ public class AddPanel extends javax.swing.JPanel {
                 JOptionPane.showMessageDialog(this, "Amount is null!", "Error", JOptionPane.INFORMATION_MESSAGE);
                 TextAmount.setBackground(new Color(255, 123, 123));
             } else {
-                Product ptd = new Product(ID, Name, OriginPrice, Price, Amount);
+                Product ptd = new Product();
                 TextName.setBackground(null);
                 TextID.setBackground(null);
                 TextOriginPrice.setBackground(null);
                 TextPrice.setBackground(null);
                 TextAmount.setBackground(null);
+                
+                ptd.setProductID(ID);
+                ptd.setProductName(Name);
+                ptd.setOriginPrice(OriginPrice);
+                ptd.setPrice(Price);
+                ptd.setAmount(Amount);
+                
                 if (Application.search(ID) == true) JOptionPane.showMessageDialog(this, "ID has already existed!", "Error", JOptionPane.INFORMATION_MESSAGE);
-                else Application.insert(ptd);
+                else{
+                    Application.insert(ptd);
+                    Application.update(1, ID, Name, OriginPrice, Price, Amount);
+                }
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Errol: " + e.getMessage());
@@ -318,6 +339,11 @@ public class AddPanel extends javax.swing.JPanel {
     private void TextAmountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TextAmountActionPerformed
 
     }//GEN-LAST:event_TextAmountActionPerformed
+
+    private void tblProductAddMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblProductAddMouseClicked
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_tblProductAddMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
